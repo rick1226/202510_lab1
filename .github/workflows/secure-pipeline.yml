@@ -307,7 +307,7 @@ jobs:
           fi
 
       - name: 執行 SonarCloud 掃描
-        uses: SonarSource/sonarqube-scan-action@a31c9398be7ace6bbfaf30c0bd5d415f843d45e9
+        uses: SonarSource/sonarqube-scan-action@739ae252fb2c0b1b4e61f0b0c9e4c8b6c8e7f8a9
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
