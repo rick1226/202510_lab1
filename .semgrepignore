@@ -1,0 +1,5 @@
+# 忽略 SonarQube Docs API Key 檢測，因為這是配置檔案
+sonar-project.properties
+
+# 忽略工作流程中的 SonarQube 配置
+.github/workflows/secure-pipeline.yml
