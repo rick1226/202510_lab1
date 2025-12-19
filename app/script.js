@@ -6,6 +6,7 @@ let playerScore = 0;
 let computerScore = 0;
 let drawScore = 0;
 let difficulty = 'medium';
+let theme = 'light'; // 新增主題變數
 
 // Cookie 工具函數
 function setCookie(name, value, days = 30) {
@@ -26,11 +27,15 @@ function loadScoresFromCookie() {
     const savedComputerScore = getCookie('computerScore');
     const savedDrawScore = getCookie('drawScore');
     const savedDifficulty = getCookie('difficulty');
+    const savedTheme = getCookie('theme');
     
     if (savedPlayerScore) playerScore = parseInt(savedPlayerScore);
     if (savedComputerScore) computerScore = parseInt(savedComputerScore);
     if (savedDrawScore) drawScore = parseInt(savedDrawScore);
     if (savedDifficulty) difficulty = savedDifficulty;
+    if (savedTheme) theme = savedTheme;
+    
+    applyTheme(); // 應用載入的主題
 }
 
 function saveScoresToCookie() {
@@ -38,6 +43,18 @@ function saveScoresToCookie() {
     setCookie('computerScore', computerScore);
     setCookie('drawScore', drawScore);
     setCookie('difficulty', difficulty);
+    setCookie('theme', theme);
+}
+
+// 主題切換函數
+function applyTheme() {
+    document.body.className = theme;
+}
+
+function toggleTheme() {
+    theme = theme === 'light' ? 'dark' : 'light';
+    applyTheme();
+    saveScoresToCookie();
 }
 
 // 獲勝組合
@@ -61,6 +78,7 @@ const difficultySelect = document.getElementById('difficultySelect');
 const playerScoreDisplay = document.getElementById('playerScore');
 const computerScoreDisplay = document.getElementById('computerScore');
 const drawScoreDisplay = document.getElementById('drawScore');
+const themeBtn = document.getElementById('themeBtn');
 
 // 初始化遊戲
 function init() {
@@ -71,6 +89,7 @@ function init() {
     resetBtn.addEventListener('click', resetGame);
     resetScoreBtn.addEventListener('click', resetScore);
     difficultySelect.addEventListener('change', handleDifficultyChange);
+    themeBtn.addEventListener('click', toggleTheme); // 添加主題切換事件
     updateScoreDisplay();
 }
 
@@ -311,11 +330,13 @@ function updateScoreDisplay() {
     playerScoreDisplay.textContent = playerScore;
     computerScoreDisplay.textContent = computerScore;
     drawScoreDisplay.textContent = drawScore;
+    saveScoresToCookie(); // 保存分數到 Cookie
 }
 
 // 處理難度變更
 function handleDifficultyChange(e) {
     difficulty = e.target.value;
+    saveScoresToCookie(); // 保存難度到 Cookie
     resetGame();
 }
 

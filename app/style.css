@@ -230,3 +230,53 @@ button {
         font-size: 0.9em;
     }
 }
+
+/* 深色主題 */
+body.dark {
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    color: #ecf0f1;
+}
+
+body.dark .container {
+    background: #34495e;
+    color: #ecf0f1;
+}
+
+body.dark h1 {
+    color: #ecf0f1;
+}
+
+body.dark .status {
+    background: #2c3e50;
+    color: #ecf0f1;
+}
+
+body.dark .cell {
+    background: #2c3e50;
+    color: #ecf0f1;
+    border: 2px solid #7f8c8d;
+}
+
+body.dark .cell.taken.X {
+    background: #e74c3c;
+}
+
+body.dark .cell.taken.O {
+    background: #3498db;
+}
+
+body.dark button {
+    background: #2c3e50;
+    color: #ecf0f1;
+    border: 2px solid #7f8c8d;
+}
+
+body.dark button:hover {
+    background: #34495e;
+}
+
+body.dark select {
+    background: #2c3e50;
+    color: #ecf0f1;
+    border: 2px solid #7f8c8d;
+}
