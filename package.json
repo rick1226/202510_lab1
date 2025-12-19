@@ -1,0 +1,25 @@
+{
+  "name": "tic-tac-toe-game",
+  "version": "1.0.0",
+  "description": "井字遊戲 - 靜態網頁應用",
+  "main": "app/script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint app/script.js",
+    "build": "echo 'Static site, no build needed'"
+  },
+  "keywords": [
+    "tic-tac-toe",
+    "game",
+    "javascript"
+  ],
+  "author": "rick1226",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^8.57.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rick1226/202510_lab1.git"
+  }
+}

@@ -280,11 +280,51 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITLEAKS_ENABLE_SUMMARY: true
 
-  # 6. 安全掃描結果總結
+  # 6. 程式碼品質分析 - SonarQube/SonarCloud
+  code-quality:
+    runs-on: ubuntu-latest
+    name: 程式碼品質 - SonarCloud
+    needs: [sast-scan]
+    steps:
+      - name: Checkout 代碼
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 設定 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
+
+      - name: 安裝依賴
+        run: |
+          if [ -f package.json ]; then
+            npm ci
+          else
+            echo "無 package.json，跳過安裝"
+          fi
+
+      - name: 執行 SonarCloud 掃描
+        uses: SonarSource/sonarqube-scan-action@v2
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.projectKey=${{ github.repository_owner }}_${{ github.event.repository.name }}
+            -Dsonar.organization=${{ github.repository_owner }}
+            -Dsonar.sources=app
+            -Dsonar.exclusions=**/node_modules/**,**/dist/**,**/*.min.js
+            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+            -Dsonar.tests=app
+            -Dsonar.test.inclusions=**/*.test.js,**/*.spec.js
+
+  # 7. 安全掃描結果總結
   security-summary:
     runs-on: ubuntu-latest
     name: 安全掃描總結
-    needs: [sast-scan, sca-scan, container-scan, iac-scan, secret-scan]
+    needs: [sast-scan, sca-scan, container-scan, iac-scan, secret-scan, code-quality]
     if: always()
     outputs:
       all-passed: ${{ steps.check-status.outputs.all-passed }}
@@ -302,6 +342,7 @@ jobs:
           echo "3. 容器映像掃描 - Trivy: ${{ needs.container-scan.result }}"
           echo "4. IaC 安全檢查 - Checkov: ${{ needs.iac-scan.result }}"
           echo "5. Secret 掃描 - Gitleaks: ${{ needs.secret-scan.result }}"
+          echo "6. 程式碼品質分析 - SonarCloud: ${{ needs.code-quality.result }}"
           echo ""
           echo "📊 詳細結果請查看："
           echo "   - Security 標籤 → Code scanning alerts"
@@ -313,7 +354,8 @@ jobs:
              [[ "${{ needs.sca-scan.result }}" == "failure" ]] || \
              [[ "${{ needs.container-scan.result }}" == "failure" ]] || \
              [[ "${{ needs.iac-scan.result }}" == "failure" ]] || \
-             [[ "${{ needs.secret-scan.result }}" == "failure" ]]; then
+             [[ "${{ needs.secret-scan.result }}" == "failure" ]] || \
+             [[ "${{ needs.code-quality.result }}" == "failure" ]]; then
             echo "⚠️  警告：部分掃描發現問題，請檢查詳細報告"
             echo "all-passed=false" >> $GITHUB_OUTPUT
           else
@@ -376,7 +418,7 @@ jobs:
           echo "🔗 查看 Package："
           echo "https://github.com/${{ github.repository }}/pkgs/container/$(basename ${{ github.repository }})"
 
-  # 8. 建置網站
+  # 9. 建置網站
   build:
     runs-on: ubuntu-latest
     name: 建置網站
@@ -396,7 +438,7 @@ jobs:
         with:
           path: './app'
 
-  # 9. 部署到 GitHub Pages
+  # 10. 部署到 GitHub Pages
   deploy:
     runs-on: ubuntu-latest
     name: 部署到 GitHub Pages
