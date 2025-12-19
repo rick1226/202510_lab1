@@ -7,6 +7,39 @@ let computerScore = 0;
 let drawScore = 0;
 let difficulty = 'medium';
 
+// Cookie 工具函數
+function setCookie(name, value, days = 30) {
+    const expires = new Date();
+    expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
+    document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
+}
+
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+    return null;
+}
+
+function loadScoresFromCookie() {
+    const savedPlayerScore = getCookie('playerScore');
+    const savedComputerScore = getCookie('computerScore');
+    const savedDrawScore = getCookie('drawScore');
+    const savedDifficulty = getCookie('difficulty');
+    
+    if (savedPlayerScore) playerScore = parseInt(savedPlayerScore);
+    if (savedComputerScore) computerScore = parseInt(savedComputerScore);
+    if (savedDrawScore) drawScore = parseInt(savedDrawScore);
+    if (savedDifficulty) difficulty = savedDifficulty;
+}
+
+function saveScoresToCookie() {
+    setCookie('playerScore', playerScore);
+    setCookie('computerScore', computerScore);
+    setCookie('drawScore', drawScore);
+    setCookie('difficulty', difficulty);
+}
+
 // 獲勝組合
 const winningConditions = [
     [0, 1, 2],
@@ -31,6 +64,7 @@ const drawScoreDisplay = document.getElementById('drawScore');
 
 // 初始化遊戲
 function init() {
+    loadScoresFromCookie(); // 從 Cookie 載入分數
     cells.forEach(cell => {
         cell.addEventListener('click', handleCellClick);
     });
