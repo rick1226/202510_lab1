@@ -287,12 +287,12 @@ jobs:
     needs: [sast-scan]
     steps:
       - name: Checkout 代碼
-        uses: actions/checkout@v4
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
         with:
           fetch-depth: 0
 
       - name: 設定 Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8
         with:
           node-version: '18'
           cache: 'npm'
@@ -307,18 +307,19 @@ jobs:
           fi
 
       - name: 執行 SonarCloud 掃描
-        uses: SonarSource/sonarqube-scan-action@v2
+        uses: SonarSource/sonarqube-scan-action@a31c9398be7ace6bbfaf30c0bd5d415f843d45e9
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
-            -Dsonar.projectKey=${{ github.repository_owner }}_${{ github.event.repository.name }}
-            -Dsonar.organization=${{ github.repository_owner }}
+            -Dsonar.projectKey=rick1226_202510_lab1
+            -Dsonar.organization=rick1226
             -Dsonar.sources=app
             -Dsonar.exclusions=**/node_modules/**,**/dist/**,**/*.min.js
             -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
             -Dsonar.tests=app
             -Dsonar.test.inclusions=**/*.test.js,**/*.spec.js
+            -Dsonar.host.url=https://sonarcloud.io
 
   # 7. 安全掃描結果總結
   security-summary:
@@ -426,7 +427,7 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
       - name: Checkout 代碼
-        uses: actions/checkout@v4
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
 
       - name: 設定 Pages
         uses: actions/configure-pages@v4
