@@ -310,16 +310,6 @@ jobs:
         uses: SonarSource/sonarqube-scan-action@a31c9398be7ace6bbfaf30c0bd5d415f843d45e9
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          args: >
-            -Dsonar.projectKey=rick1226_202510_lab1
-            -Dsonar.organization=rick1226
-            -Dsonar.sources=app
-            -Dsonar.exclusions=**/node_modules/**,**/dist/**,**/*.min.js
-            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
-            -Dsonar.tests=app
-            -Dsonar.test.inclusions=**/*.test.js,**/*.spec.js
-            -Dsonar.host.url=https://sonarcloud.io
 
   # 7. 安全掃描結果總結
   security-summary:
