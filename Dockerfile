@@ -27,5 +27,8 @@ RUN sed -i 's/listen\s*80;/listen 8080;/g' /etc/nginx/conf.d/default.conf && \
 # 暴露 8080 端口（非特權端口）
 EXPOSE 8080
 
+# 切換到非 root 用戶以提高安全性
+USER nginx
+
 # 啟動 Nginx
 CMD ["nginx", "-g", "daemon off;"]
