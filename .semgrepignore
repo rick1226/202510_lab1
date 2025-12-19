@@ -3,3 +3,6 @@ sonar-project.properties
 
 # 忽略工作流程中的 SonarQube 配置
 .github/workflows/secure-pipeline.yml
+
+# 忽略 WebSocket 安全檢查，因為本專案為靜態網頁，無 WebSocket 使用
+# rules: javascript.lang.security.insecure-websocket
