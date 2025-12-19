@@ -1,7 +1,9 @@
-# 使用輕量級的 Nginx Alpine 映像
-FROM nginx:alpine3.18-perl
+# 使用輕量級的 Nginx Alpine 映像（更新到最新版本以修復 libxml2 CVE-2024-56171）
+FROM nginx:alpine3.20-perl
 
-# 維護者資訊
+# 更新系統套件以修復安全漏洞
+RUN apk update && apk upgrade --no-cache && \
+    apk add --no-cache libxml2>=2.11.8-r1
 LABEL org.opencontainers.image.source="https://github.com/YOUR_USERNAME/YOUR_REPO"
 LABEL org.opencontainers.image.description="井字遊戲 - 靜態網頁應用"
 LABEL org.opencontainers.image.licenses="MIT"
