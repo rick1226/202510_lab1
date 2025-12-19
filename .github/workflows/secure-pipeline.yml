@@ -388,6 +388,8 @@ jobs:
 
       - name: 設定 Pages
         uses: actions/configure-pages@v4
+        with:
+          enablement: true
 
       - name: 上傳 artifact
         uses: actions/upload-pages-artifact@v3
